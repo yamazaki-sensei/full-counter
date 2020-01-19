@@ -30,9 +30,6 @@ struct SettingView: View {
 
 struct SettingView_Previews: PreviewProvider {
     static var previews: some View {
-        let v = ContentView()
-        v.countMap = [.two: 10]
-
-        return v
+        return SettingView()
     }
 }

@@ -10,17 +10,41 @@ import SwiftUI
 
 struct ContentView: View {
 
-    @State var countMap = [CardType: Int]()
+    struct CounterState {
+        var countMap: [CardType: Int] = [
+            .ace: 0,
+            .two: 0,
+            .three: 0,
+            .four: 0,
+            .five: 0,
+            .six: 0,
+            .seven: 0,
+            .eight: 0,
+            .nine: 0,
+            .ten: 0,
+        ]
+        var count = 0
+    }
+
+    @State var state = CounterState()
 
     var body: some View {
-        List(countMap.keys.map{ $0 }) { type in
-            self.countRow(type: type, value: self.countMap[type]!)
+        VStack {
+            Text("Count: \(state.count)")
+            List(CardType.allCases.map{ $0 }) { type in
+                self.countRow(type: type, value: self.state.countMap[type]!)
+            }
         }
     }
 
     private func countRow(type: CardType, value: Int) -> some View {
         HStack {
             Text(type.rawValue)
+            Button(action: {
+                self.state.countMap[type]! += 1
+            }) {
+                Text("ADD").foregroundColor(.red)
+            }
             Text("\(value)")
         }
     }
@@ -28,6 +52,6 @@ struct ContentView: View {
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
-        ContentView(countMap: [.two: 10, .three: 5])
+        ContentView()
     }
 }
