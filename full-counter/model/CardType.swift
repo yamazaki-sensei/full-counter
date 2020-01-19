@@ -8,7 +8,11 @@
 
 import Foundation
 
-enum CardType : String, CaseIterable {
+enum CardType : String, CaseIterable, Identifiable {
+    var id: String {
+        return self.rawValue
+    }
+
     case ace     = "A"
     case two     = "2"
     case three   = "3"
