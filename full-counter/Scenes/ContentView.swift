@@ -29,10 +29,25 @@ struct ContentView: View {
     @State var state = CounterState()
     @State var settingsShown = false
 
+    var currentCount: Int {
+        CardType.allCases.reduce(0) { (result, type) -> Int in
+            result + Count.get(type: type) * state.countMap[type]!
+        }
+    }
+
     var body: some View {
         NavigationView {
             VStack {
-                Text("Count: \(state.count)")
+                HStack {
+                    Text("Count: \(currentCount)")
+                    Spacer()
+                        .frame(width: 32.0)
+                    Button(action: {
+                        self.state = CounterState()
+                    }) {
+                        Text("Reset")
+                    }
+                }
                 List(CardType.allCases.map{ $0 }) { type in
                     self.countRow(type: type, value: self.state.countMap[type]!)
                 }
@@ -52,6 +67,7 @@ struct ContentView: View {
             }) {
                 Text("ADD").foregroundColor(.red)
             }
+            Spacer()
             Text("\(value)")
         }
     }
