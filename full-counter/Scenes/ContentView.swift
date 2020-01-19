@@ -27,13 +27,20 @@ struct ContentView: View {
     }
 
     @State var state = CounterState()
+    @State var settingsShown = false
 
     var body: some View {
-        VStack {
-            Text("Count: \(state.count)")
-            List(CardType.allCases.map{ $0 }) { type in
-                self.countRow(type: type, value: self.state.countMap[type]!)
+        NavigationView {
+            VStack {
+                Text("Count: \(state.count)")
+                List(CardType.allCases.map{ $0 }) { type in
+                    self.countRow(type: type, value: self.state.countMap[type]!)
+                }
             }
+            .navigationBarTitle("Current State")
+            .navigationBarItems(trailing: settingButton())
+        }.sheet(isPresented: $settingsShown) {
+            SettingView()
         }
     }
 
@@ -46,6 +53,14 @@ struct ContentView: View {
                 Text("ADD").foregroundColor(.red)
             }
             Text("\(value)")
+        }
+    }
+
+    private func settingButton() -> some View {
+        Button(action: {
+            self.settingsShown = true
+        }) {
+            Text("Setting").foregroundColor(.accentColor)
         }
     }
 }
