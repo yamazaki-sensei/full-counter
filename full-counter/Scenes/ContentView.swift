@@ -55,7 +55,9 @@ struct ContentView: View {
             .navigationBarTitle("Current State")
             .navigationBarItems(trailing: settingButton())
         }.sheet(isPresented: $settingsShown) {
-            SettingView()
+            SettingView {
+                self.settingsShown = false
+            }
         }
     }
 

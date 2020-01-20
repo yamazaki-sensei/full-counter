@@ -10,13 +10,26 @@ import SwiftUI
 
 struct SettingView: View {
 
-    @State var countMap = [CardType: Int]()
+    private var dismiss: (() -> Void)?
+    @State private var countMap = [CardType: Int]()
+
+    init(dismiss: @escaping () -> Void) {
+        self.dismiss = dismiss
+        let initial: [CardType: Int] = CardType.allCases.map { type  in
+            (type: type, value: Count.get(type: type))
+        }.reduce([:], { (result, current) in
+            var ret = result
+            ret[current.type] = current.value
+            return ret
+        })
+
+        self._countMap = State(initialValue: initial)
+    }
+
 
     var body: some View {
-        NavigationView {
-            List(countMap.keys.map{ $0 }) { type in
-                self.settingRow(type: type, value: self.countMap[type]!)
-            }
+        List(CardType.allCases.map { $0 }) { type in
+            self.settingRow(type: type, value: self.countMap[type]!)
         }
     }
 
@@ -30,6 +43,8 @@ struct SettingView: View {
 
 struct SettingView_Previews: PreviewProvider {
     static var previews: some View {
-        return SettingView()
+        return SettingView() {
+
+        }
     }
 }
